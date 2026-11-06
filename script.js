@@ -1,5 +1,10 @@
-const showSelect = document.getElementById("show-select");
-const showDetails = document.getElementById("show-details");
+const showSelect = document.getElementById("show-select")
+const showDetails = document.getElementById("show-details")
+const message = document.getElementById("message")
+
+function setMessage(text) {
+  message.textContent = text
+}
 
 function fillDropdown(shows) {
     showSelect.innerHTML = ""
@@ -16,35 +21,36 @@ function fillDropdown(shows) {
 }
 
 async function loadShows() {
-  const url = "https://api.tvmaze.com/shows?page=0";
+  const url = "https://api.tvmaze.com/shows?page=0"
+
+  setMessage("Loading top shows...")
 
   try {
     const res = await fetch(url);
 
     if (!res.ok) {
-      throw new Error(`Request failed with status ${res.status}`);
+      throw new Error(`Request failed with status ${res.status}`)
     }
 
-    const shows = await res.json();
+    const shows = await res.json()
     const getRatings = (show) => show.rating?.average || 0
     shows.sort((a, b) => getRatings(b) - getRatings(a))
     const top25Shows = shows.slice(0, 25)
     fillDropdown(top25Shows)
+    setMessage("")
   } catch (error) {
-    console.error(error);
+    console.error(error)
+    setMessage("Sorry, the show list couldn't be loaded. Try again later.")
   }
 }
 
 loadShows();
 
 function displayDetails(show) {
-  // 1. Clear #show-details
   showDetails.innerHTML = ""
-  // 2. Create and append the heading
   const heading = document.createElement("h2")
   heading.textContent = show.name
   showDetails.appendChild(heading)
-  // 3. If image exists: create the img, set src and alt, append it. Otherwise: create a message element, append it
   if (show.image && show.image.medium) {
     const img = document.createElement("img")
     img.src = show.image.medium
@@ -55,11 +61,9 @@ function displayDetails(show) {
     noImg.textContent = "No image available."
     showDetails.appendChild(noImg)
   }
-  // 4. Create a container for the summary, set its HTML, append it
   const summary = document.createElement("div")
   summary.innerHTML = show.summary || "<p>No summary available.</p>"
   showDetails.appendChild(summary)
-  // 5. Create and append one line with genres, premiered, status, and rating
   const genres = show.genres && show.genres.length ? show.genres.join(", ") : "N/A"
   const premiered = show.premiered || "N/A"
   const status = show.status || "N/A"
@@ -71,26 +75,36 @@ function displayDetails(show) {
 }
 
 async function loadShowDetails(id) {
-  const url = `https://api.tvmaze.com/shows/${id}`;
+  const url = `https://api.tvmaze.com/shows/${id}`
 
   try {
-    const res = await fetch(url);
+    const res = await fetch(url)
 
     if (!res.ok) {
+      if (res.status === 404) {
+        throw new Error("That show could not be found.");
+      }
       throw new Error(`Request failed with status ${res.status}`);
     }
 
-    const show = await res.json();
+    const show = await res.json()
     displayDetails(show)
   } catch (error) {
-    console.error(error);
+    console.error(error)
+    if (error.message === "That show could not be found.") {
+      setMessage(error.message)
+    } else {
+      setMessage("Sorry, the details of the show couldn't be loaded as of now. Try again later.")
+    }
   }
 }
 
 showSelect.addEventListener("change", function () {
-  const id = showSelect.value;
+  const id = showSelect.value
 
   if (id === "") {
+    showDetails.innerHTML = ""
+    setMessage("")
     return;
   }
 
