@@ -37,6 +37,39 @@ async function loadShows() {
 
 loadShows();
 
+function displayDetails(show) {
+  // 1. Clear #show-details
+  showDetails.innerHTML = ""
+  // 2. Create and append the heading
+  const heading = document.createElement("h2")
+  heading.textContent = show.name
+  showDetails.appendChild(heading)
+  // 3. If image exists: create the img, set src and alt, append it. Otherwise: create a message element, append it
+  if (show.image && show.image.medium) {
+    const img = document.createElement("img")
+    img.src = show.image.medium
+    img.alt = `Poster for ${show.name}`
+    showDetails.appendChild(img)
+  } else {
+    const noImg = document.createElement("p")
+    noImg.textContent = "No image available."
+    showDetails.appendChild(noImg)
+  }
+  // 4. Create a container for the summary, set its HTML, append it
+  const summary = document.createElement("div")
+  summary.innerHTML = show.summary || "<p>No summary available.</p>"
+  showDetails.appendChild(summary)
+  // 5. Create and append one line with genres, premiered, status, and rating
+  const genres = show.genres && show.genres.length ? show.genres.join(", ") : "N/A"
+  const premiered = show.premiered || "N/A"
+  const status = show.status || "N/A"
+  const rating = show.rating?.average ?? "N/A"
+
+  const info = document.createElement("p")
+  info.textContent = `Genres: ${genres} | Premiered: ${premiered} | Status: ${status} | Rating: ${rating}`
+  showDetails.appendChild(info)
+}
+
 async function loadShowDetails(id) {
   const url = `https://api.tvmaze.com/shows/${id}`;
 
@@ -48,7 +81,7 @@ async function loadShowDetails(id) {
     }
 
     const show = await res.json();
-    console.log(show);
+    displayDetails(show)
   } catch (error) {
     console.error(error);
   }
