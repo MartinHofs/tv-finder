@@ -1,0 +1,88 @@
+body {
+    font-family: Arial, sans-serif;
+    max-width: 1000px;
+    margin: 2rem auto;
+    padding: 0 1rem;
+    line-height: 1.5;
+    text-align: center;
+    background-color: slateblue;
+}
+
+h1,
+h2,
+label,
+p {
+    color: slategray;
+    transition: 0.3s;
+}
+
+h1:hover {
+    color: whitesmoke;
+    font-size: 5em;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+h2:hover {
+    color: black;
+    font-size: 3em;
+}
+
+label:hover,
+p:hover {
+    color: whitesmoke;
+}
+
+select {
+    color: red;
+    background-color: lightyellow;
+    border: 1px solid #ccc;
+    transition: 0.3s;
+}
+
+select:hover {
+    color: black;
+    background-color: lightblue;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+}
+
+#show-details label:hover,
+#show-details p:hover {
+    color: black;
+    font-style: italic;
+    font-size: 1.2em;
+}
+
+#show-details {
+    max-width: 100%;
+    border-style: solid;
+    border-color: beige;
+    background-color: bisque;
+    border-radius: 6px;
+    transition: 0.3s;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.25);
+}
+
+#show-details:hover {
+    background-color: lightyellow;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.5);
+}
+
+select {
+    margin-left: 0.5rem;
+    padding: 0.25rem;
+}
+
+#message {
+    font-style: italic;
+    color: #b00020;
+}
+
+#show-details img {
+    max-width: 100%;
+    border-radius: 6px;
+    transition: 0.3s;
+}
+
+#show-details img:hover {
+    transform: scale(1.05);
+}
